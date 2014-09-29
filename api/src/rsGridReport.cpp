@@ -5,7 +5,7 @@
 
 #include "irods_log.hpp"
 #include "grid_report_403.hpp"
-#include "server_report.hpp"
+#include "server_report_403.hpp"
 #include "gather_resources.hpp"
 #include "irods_resource_manager.hpp"
 #include "irods_resource_backport.hpp"
