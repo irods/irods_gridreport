@@ -8,7 +8,7 @@
 #include "rodsPath.hpp"
 #include "lsUtil.hpp"
 #include "irods_buffer_encryption.hpp"
-#include "grid_report.hpp"
+#include "grid_report_403.hpp"
 #include <string>
 #include <iostream>
 
