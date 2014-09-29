@@ -1,0 +1,56 @@
+######################################################################
+# General settings below.
+# These should not need to be changed in most cases.
+
+SODIR = obj
+INCDIR= include
+
+AGNOSTIC_OBJS = $(patsubst ${SRCDIR}/%.cpp, ${SODIR}/lib%.so, ${SRCS})
+
+SERVER_OBJS = $(patsubst ${SRCDIR}/%.cpp, ${SODIR}/lib%_server.so, ${SRCS})
+CLIENT_OBJS = $(patsubst ${SRCDIR}/%.cpp, ${SODIR}/lib%_client.so, ${SRCS})
+
+ifndef ${GCC}
+GCC=g++
+endif
+
+CFLAGS+= -Wno-write-strings
+CFLAGS+= -Wall
+CFLAGS+= -L/usr/lib/irods
+
+SERVER_CFLAGS= -DRODS_SERVER
+
+INC = -I/usr/include/irods -I${INCDIR} ${EXTRAINCS}
+
+EXTRALIBS += \
+					-lirods_client 
+#					-lirods_server \
+
+.PHONY: default-base default clean-base agnostic-base api-base client-base server-base
+
+default-base: default
+
+agnostic-base: ${AGNOSTIC_OBJS}
+
+api-base: client-base server-base
+
+client-base: ${CLIENT_OBJS}
+
+server-base: ${SERVER_OBJS}
+
+clean-base:
+	@-rm -f ${SODIR}/* > /dev/null 2>&1
+
+
+$(AGNOSTIC_OBJS) : $(SODIR)/lib%.so : $(SRCDIR)/%.cpp 
+	@echo "Compile plugin `basename $@`..."
+	@${GCC} ${CFLAGS} ${AGNOSTIC_CFLAGS} ${INC} -fPIC -shared -o $@ $< ${EXTRALIBS} ${AGNOSTIC_LIBS}
+
+$(SERVER_OBJS) : $(SODIR)/lib%_server.so : $(SRCDIR)/%.cpp  ${SERVER_LIBS}
+	@echo "Compile plugin `basename $@`..."
+	@${GCC} -DRODS_SERVER -DRODS_CAT ${CFLAGS} ${SERVER_CFLAGS} ${INC} -fPIC -shared -o $@ $< ${EXTRALIBS} ${SERVER_LIBS}
+
+$(CLIENT_OBJS) : $(SODIR)/lib%_client.so : $(SRCDIR)/%.cpp ${CLIENT_LIBS}
+	@echo "Compile plugin `basename $@`..."
+	@${GCC} ${CFLAGS} ${CLIENT_CFLAGS} ${INC} -fPIC -shared -o $@ $< ${EXTRALIBS} ${CLIENT_LIBS}
+
