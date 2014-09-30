@@ -1,9 +1,9 @@
 # =-=-=-=-=-=-=-
 # EPM Variables
 # =-=-=-=-=-=-=-
-%product iRODS WOS Resource Plugin
+%product iRODS GridReport iCommand Plugin
 %copyright 2014, The University of North Carolina at Chapel Hill
-%vendor Renaissance Computing Institute <info@irods-consortium.org>
+%vendor Renaissance Computing Institute <info@irods.org>
 %license LICENSE
 %readme README
 %description The integrated Rule-Oriented Data System
