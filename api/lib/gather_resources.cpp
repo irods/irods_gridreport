@@ -263,7 +263,7 @@ irods::error gather_resources(
             }
 
             clearGenQueryInp( &genQueryInp );
-            return ERROR( status, "genqery failed." );
+            return ERROR( status, "genQuery failed." );
 
         } // if
 
