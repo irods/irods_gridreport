@@ -121,7 +121,7 @@ irods::error process_gather_resources_results(
     if( status < 0 ) {
         return ERROR( 
             status,
-            "getRodEnv failed" );
+            "getRodsEnv failed" );
     }
 
     // =-=-=-=-=-=-=-
