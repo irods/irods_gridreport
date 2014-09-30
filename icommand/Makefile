@@ -30,7 +30,7 @@ BOOST_LIBS = \
 
 LIBRARY = ../api/libirods_gridreport_client.a \
           -lirods_client \
-		  -lirods_client_api \
+          -lirods_client_api \
           $(BOOST_LIBS)
 
 LDFLAGS +=	$(LIBRARY) $(MODULE_LDFLAGS) $(CL_LDADD) 
