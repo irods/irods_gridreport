@@ -10,6 +10,7 @@
 #include "irods_api_home.hpp"
 #include "irods_database_home.hpp"
 #include "irods_lookup_table.hpp"
+#include "irods_home_directory.hpp"
 #include "irods_log.hpp"
 #include "grid_server_properties.hpp"
 #include "irods_plugin_name_generator.hpp"
@@ -1011,6 +1012,94 @@ extern "C" {
 
 
 
+    irods::error get_version(
+        rsComm_t* _comm,
+        json_t*&  _version ) {
+        namespace fs = boost::filesystem;
+        if( !_comm ) {
+            return ERROR( 
+                       SYS_INVALID_INPUT_PARAM,
+                       "comm is null" );
+        }
+
+        _version = json_object();
+        if( !_version ) {
+            return ERROR(
+                       SYS_MALLOC_ERR,
+                       "json_object() failed" );
+
+        }
+
+        std::string version_path = irods::IRODS_HOME_DIRECTORY + "VERSION";
+        std::ifstream f( version_path.c_str(), std::ios::in );
+        if( !f.is_open() ) {
+            std::string msg( "failed to open [" );
+            msg += version_path;
+            msg += "]";
+            return ERROR(
+                       -1,
+                       msg );
+        }
+
+        std::string line;
+        while( getline( f, line ) ) {
+            std::vector< std::string > tok;
+            boost::split( 
+                tok, 
+                line, 
+                boost::is_any_of( "=" ) );
+
+            if( "IRODSVERSION" == tok[0] ) {
+                json_object_set( 
+                    _version, 
+                    "irods_version", 
+                    json_string( tok[1].c_str() ) );
+
+            } else if( "CATALOG_SCHEMA_VERSION" == tok[0] ) {
+                int csv = boost::lexical_cast< int >( tok[1] );
+                json_object_set( 
+                    _version, 
+                    "catalog_schema_version", 
+                    json_integer( csv ) );
+                    
+            }
+
+        }
+
+        f.close();
+
+        json_object_set( 
+            _version,
+            "commit_id",
+            json_string( "0000000000000000000000000000000000000000" ) );
+
+        json_object_set(
+            _version,
+            "installation_time",
+            json_string( "2014-01-01T12:00:00Z" ) );
+                    
+        json_object_set(
+            _version,
+            "build_system_information",
+            json_string( "not provided" ) );
+
+        json_object_set(
+            _version,
+            "compiler_version",
+            json_string( "not provided" ) );
+        
+        json_object_set(
+            _version,
+            "compile_time",
+            json_string( "2014-01-01T12:00:00Z" ) );
+
+        return SUCCESS();
+
+    } // get_version
+
+
+
+
     int _rsServerReport( 
         rsComm_t*    _comm,
         bytesBuf_t** _bbuf ) {
@@ -1031,9 +1120,14 @@ extern "C" {
 
         }
 
-
         json_t* resc_svr = json_object();
-        json_object_set( resc_svr, "commit_id", json_string( "0000000000000000000000000000000000000000" ) );
+        if( !resc_svr ) {
+            rodsLog( 
+                LOG_ERROR,
+                "_rsServerReport :: json_object() failed" );
+            return SYS_MALLOC_ERR;
+                       
+        }
 
         std::string os_string;
         irods::error ret = get_os_string( os_string );
@@ -1042,6 +1136,14 @@ extern "C" {
         }
         json_object_set( resc_svr, "os", json_string( os_string.c_str() ) );
 
+        json_t* version = 0;
+        ret = get_version(
+                  _comm,
+                  version );
+        if( !ret.ok() ) {
+            irods::log( PASS( ret ) );
+        }
+        json_object_set( resc_svr, "version", version );
 
         json_t* svr_cfg = 0;
         ret = convert_server_config( svr_cfg );
