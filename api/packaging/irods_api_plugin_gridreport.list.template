@@ -108,6 +108,5 @@ END_POSTREMOVE
 # Full File Listing
 # =-=-=-=-=-=-=-
 f 644 $OS_IRODS_ACCT $OS_IRODS_ACCT ${IRODS_HOME_DIR}/plugins/api/ obj/*.so
-
-
-
+d 755 $OS_IRODS_ACCT $OS_IRODS_ACCT ${IRODS_HOME_DIR}/iRODS/scripts/python -
+f 644 $OS_IRODS_ACCT $OS_IRODS_ACCT ${IRODS_HOME_DIR}/iRODS/scripts/python/system_identification.py scripts/system_identification.py
