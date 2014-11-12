@@ -1,0 +1,8 @@
+api/build/*.deb
+api/lib/.cli_objs/
+api/lib/.svr_objs/
+api/*.a
+api/obj/*.so
+icommand/bin/igridreport
+icommand/build/*.deb
+icommand/obj/*.o
