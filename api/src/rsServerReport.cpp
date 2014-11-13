@@ -303,6 +303,9 @@ extern "C" {
             json_object_set( _svr_cfg, "federation", arr );
         }
 
+        json_t* env_obj = json_object();
+        json_object_set( _svr_cfg, "environment_variables", env_obj );
+
         return SUCCESS();
 
     } // convert_server_config
