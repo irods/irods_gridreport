@@ -306,6 +306,21 @@ extern "C" {
         json_t* env_obj = json_object();
         json_object_set( _svr_cfg, "environment_variables", env_obj );
 
+        // handle move from irods env to server config
+        rodsEnv env;
+        int status = getRodsEnv( &env );
+        if( status < 0 ) {
+            return ERROR(
+                       status,
+                       "failed in getRodsEnv" );
+        }
+
+        json_object_set( _svr_cfg, "zone_name",        json_string( env.rodsZone ) );
+        json_object_set( _svr_cfg, "zone_user",        json_string( env.rodsUserName ) );
+        json_object_set( _svr_cfg, "zone_auth_scheme", json_string( env.rodsAuthScheme ) );
+        json_object_set( _svr_cfg, "zone_port",        json_integer( env.rodsPort ) );
+
+
         return SUCCESS();
 
     } // convert_server_config
