@@ -5,7 +5,7 @@
  *      Author: adt
  */
 
-#include "grid_server_properties.hpp"
+#include "zone_server_properties.hpp"
 #include "irods_get_full_path_for_config_file.hpp"
 
 #include "rods.hpp"
@@ -23,13 +23,13 @@
 namespace irods {
 
 // Access method for singleton
-grid_server_properties& grid_server_properties::getInstance() {
-    static grid_server_properties instance;
+zone_server_properties& zone_server_properties::getInstance() {
+    static zone_server_properties instance;
     return instance;
 }
 
 
-error grid_server_properties::capture_if_needed() {
+error zone_server_properties::capture_if_needed() {
     error result = SUCCESS();
     if ( !captured_ ) {
         result = capture();
@@ -37,8 +37,8 @@ error grid_server_properties::capture_if_needed() {
     return result;
 }
 
-// Read server.config and fill grid_server_properties::properties
-error grid_server_properties::capture() {
+// Read server.config and fill zone_server_properties::properties
+error zone_server_properties::capture() {
     error result = SUCCESS();
     std::string prop_name, prop_setting; // property name and setting
 
@@ -468,7 +468,7 @@ error grid_server_properties::capture() {
 
     return result;
 
-} // grid_server_properties::capture()
+} // zone_server_properties::capture()
 
 
 } // namespace irods

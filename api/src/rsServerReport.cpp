@@ -12,7 +12,7 @@
 #include "irods_lookup_table.hpp"
 #include "irods_home_directory.hpp"
 #include "irods_log.hpp"
-#include "grid_server_properties.hpp"
+#include "zone_server_properties.hpp"
 #include "irods_plugin_name_generator.hpp"
 #include "irods_resource_manager.hpp"
 #include "irods_get_full_path_for_config_file.hpp"
@@ -165,7 +165,7 @@ extern "C" {
     irods::error convert_server_config( 
         json_t*& _svr_cfg ) {
 
-        irods::grid_server_properties& props = irods::grid_server_properties::getInstance();
+        irods::zone_server_properties& props = irods::zone_server_properties::getInstance();
         props.capture_if_needed();
 
         _svr_cfg = json_object();
@@ -991,7 +991,7 @@ extern "C" {
     irods::error get_database_config( 
         json_t*& _db_cfg ) {
 
-        irods::grid_server_properties& props = irods::grid_server_properties::getInstance();
+        irods::zone_server_properties& props = irods::zone_server_properties::getInstance();
         props.capture_if_needed();
 
         _db_cfg = json_object();

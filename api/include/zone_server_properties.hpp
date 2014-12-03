@@ -20,16 +20,16 @@ const std::string AGENT_CONN_KW( "agent_conn" );
 /// @brief kw for server property map for encryption key
 const std::string AGENT_KEY_KW( "agent_key" );
 
-class grid_server_properties {
+class zone_server_properties {
 
 public:
     /**
      * @brief Access method for the singleton
      */
-    static grid_server_properties& getInstance();
+    static zone_server_properties& getInstance();
 
     /**
-     * @brief Read server configuration and fill grid_server_properties::properties
+     * @brief Read server configuration and fill zone_server_properties::properties
      */
     error capture();
 
@@ -76,9 +76,9 @@ public:
 
 private:
     // Disable constructors
-    grid_server_properties(): captured_( false ) {};
-    grid_server_properties( grid_server_properties const& );
-    void operator=( grid_server_properties const& );
+    zone_server_properties(): captured_( false ) {};
+    zone_server_properties( zone_server_properties const& );
+    void operator=( zone_server_properties const& );
 
     /**
      * @brief properties lookup table
@@ -87,7 +87,7 @@ private:
 
     bool captured_;
 
-}; // class grid_server_properties
+}; // class zone_server_properties
 
 
 } // namespace irods

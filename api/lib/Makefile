@@ -1,8 +1,8 @@
-TARGET = libirods_gridreport.a
+TARGET = libirods_zonereport.a
 
 SRCS =  gather_resources.cpp \
-        grid_server_properties.cpp \
-        rcGridReport.cpp \
+        zone_server_properties.cpp \
+        rcZoneReport.cpp \
         rcServerReport.cpp 
 
 HEADERS =
@@ -21,8 +21,8 @@ SVR_OBJDIR = .svr_objs
 CLI_OBJDIR = .cli_objs
 
 FULLTARGET = ${SODIR}/${TARGET}
-SVR_TARGET= ${SODIR}/libirods_gridreport_server.a
-CLI_TARGET= ${SODIR}/libirods_gridreport_client.a
+SVR_TARGET= ${SODIR}/libirods_zonereport_server.a
+CLI_TARGET= ${SODIR}/libirods_zonereport_client.a
 
 OBJS = $(patsubst %.cpp, ${OBJDIR}/%.o, ${SRCS})
 SVR_OBJS = $(patsubst %.cpp, ${SVR_OBJDIR}/%.o, ${SRCS})

@@ -15,9 +15,9 @@ srcDir = src
 #
 # Source files
 #
-OBJS =  $(objDir)/igridreport.o
+OBJS =  $(objDir)/izonereport.o
 
-BINS = $(binDir)/igridreport
+BINS = $(binDir)/izonereport
 
 # =-=-=-=-=-=-=-
 # libraries
@@ -28,7 +28,7 @@ BOOST_LIBS = \
              $(BOOST_DIR)/libboost_regex.a \
              $(BOOST_DIR)/libboost_thread.a
 
-LIBRARY = ../api/libirods_gridreport_client.a \
+LIBRARY = ../api/libirods_zonereport_client.a \
           -lirods_client \
           -lirods_client_api \
           $(BOOST_LIBS)

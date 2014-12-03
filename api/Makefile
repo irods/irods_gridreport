@@ -1,8 +1,8 @@
-SERVER_LIBRARY = libirods_gridreport_server.a
-CLIENT_LIBRARY = libirods_gridreport_client.a
+SERVER_LIBRARY = libirods_zonereport_server.a
+CLIENT_LIBRARY = libirods_zonereport_client.a
 SRCDIR = src
 
-SRCS = $(SRCDIR)/rsGridReport.cpp \
+SRCS = $(SRCDIR)/rsZoneReport.cpp \
        $(SRCDIR)/rsServerReport.cpp 
  
 MAKEFLAGS += --no-print-directory

@@ -1,7 +1,7 @@
 # =-=-=-=-=-=-=-
 # EPM Variables
 # =-=-=-=-=-=-=-
-%product iRODS GridReport iCommand Plugin
+%product iRODS ZoneReport API Plugin
 %copyright 2014, The University of North Carolina at Chapel Hill
 %vendor Renaissance Computing Institute <info@irods.org>
 %license LICENSE
@@ -9,14 +9,15 @@
 %description The integrated Rule-Oriented Data System
 %version TEMPLATE_PLUGINVERSION TEMPLATE_PLUGINVERSIONINT
 
-%requires irods-api-plugin-gridreport
+%requires irods-runtime
 
 %if DEB
 %requires libc6
- 
+%requires libcurl3
 %endif
 
 %if RPM
+%requires curl-devel
 %endif
 
 %if ARCH
@@ -106,8 +107,6 @@ END_POSTREMOVE
 # =-=-=-=-=-=-=-
 # Full File Listing
 # =-=-=-=-=-=-=-
-f 755 $OS_IRODS_ACCT $OS_IRODS_ACCT /usr/bin/ ./bin/*
-
-
-
-
+f 644 $OS_IRODS_ACCT $OS_IRODS_ACCT ${IRODS_HOME_DIR}/plugins/api/ obj/*.so
+d 755 $OS_IRODS_ACCT $OS_IRODS_ACCT ${IRODS_HOME_DIR}/iRODS/scripts/python -
+f 644 $OS_IRODS_ACCT $OS_IRODS_ACCT ${IRODS_HOME_DIR}/iRODS/scripts/python/system_identification.py scripts/system_identification.py

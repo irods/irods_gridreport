@@ -3,7 +3,7 @@
 #endif
 #include "gather_resources.hpp"
 #include "irods_resource_manager.hpp"
-#include "grid_server_properties.hpp"
+#include "zone_server_properties.hpp"
 #include "initServer.hpp"
 #include "rcMisc.hpp"
 #include "readServerConfig.hpp"
@@ -11,7 +11,7 @@
 
 
 irods::error server_is_icat() {
-    irods::grid_server_properties& props = irods::grid_server_properties::getInstance();
+    irods::zone_server_properties& props = irods::zone_server_properties::getInstance();
     props.capture_if_needed();
 
     std::string user, pass;

@@ -1,5 +1,5 @@
 /*
- * igridreport - gather a grid report
+ * izonereport - gather a zone report
 */
 #include "irods_client_api_table.hpp"
 #include "irods_pack_table.hpp"
@@ -8,7 +8,7 @@
 #include "rodsPath.hpp"
 #include "lsUtil.hpp"
 #include "irods_buffer_encryption.hpp"
-#include "grid_report_403.hpp"
+#include "zone_report_403.hpp"
 #include <string>
 #include <iostream>
 
@@ -49,11 +49,11 @@ main( int, char** ) {
     }
 
     void *tmp_out = NULL;
-    status = procApiRequest( conn, GRID_REPORT_AN, NULL, NULL,
+    status = procApiRequest( conn, ZONE_REPORT_AN, NULL, NULL,
                              &tmp_out, NULL );
 
     if ( status < 0 ) {
-        printf( "\n\nERROR :: failed in call to rcGridReport - %d\n", status );
+        printf( "\n\nERROR :: failed in call to rcZoneReport - %d\n", status );
         return 0;
     }
     else {
