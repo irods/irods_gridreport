@@ -44,13 +44,13 @@ clean-base:
 
 $(AGNOSTIC_OBJS) : $(SODIR)/lib%.so : $(SRCDIR)/%.cpp 
 	@echo "Compile plugin `basename $@`..."
-	@${GCC} ${CFLAGS} ${AGNOSTIC_CFLAGS} ${INC} -fPIC -shared -o $@ $< ${EXTRALIBS} ${AGNOSTIC_LIBS}
+	@${GCC} ${CFLAGS} ${AGNOSTIC_CFLAGS} ${INC} -Wl,-rpath=/usr/lib/irods -fPIC -shared -o $@ $< ${EXTRALIBS} ${AGNOSTIC_LIBS}
 
 $(SERVER_OBJS) : $(SODIR)/lib%_server.so : $(SRCDIR)/%.cpp  ${SERVER_LIBS}
 	@echo "Compile plugin `basename $@`..."
-	@${GCC} -DRODS_SERVER -DRODS_CAT ${CFLAGS} ${SERVER_CFLAGS} ${INC} -fPIC -shared -o $@ $< ${EXTRALIBS} ${SERVER_LIBS}
+	@${GCC} -DRODS_SERVER -DRODS_CAT ${CFLAGS} ${SERVER_CFLAGS} ${INC} -Wl,-rpath=/usr/lib/irods -fPIC -shared -o $@ $< ${EXTRALIBS} ${SERVER_LIBS}
 
 $(CLIENT_OBJS) : $(SODIR)/lib%_client.so : $(SRCDIR)/%.cpp ${CLIENT_LIBS}
 	@echo "Compile plugin `basename $@`..."
-	@${GCC} ${CFLAGS} ${CLIENT_CFLAGS} ${INC} -fPIC -shared -o $@ $< ${EXTRALIBS} ${CLIENT_LIBS}
+	@${GCC} ${CFLAGS} ${CLIENT_CFLAGS} ${INC} -Wl,-rpath=/usr/lib/irods -fPIC -shared -o $@ $< ${EXTRALIBS} ${CLIENT_LIBS}
 

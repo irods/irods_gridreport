@@ -34,7 +34,7 @@ LIBRARY = ../api/libirods_zonereport_client.a \
           $(BOOST_LIBS)
 
 LDFLAGS +=	$(LIBRARY) $(MODULE_LDFLAGS) $(CL_LDADD) 
-LDFLAGS += -L/usr/lib/irods/ -rdynamic -lrt -lpthread -ldl -lcurl -lz -lssl -lcrypto 
+LDFLAGS += -Wl,-rpath=/usr/lib/irods -L/usr/lib/irods/ -rdynamic -lrt -lpthread -ldl -lcurl -lz -lssl -lcrypto 
 
 CFLAGS += -Wno-write-strings -DADDR_64BITS -Dlinux_platform
 CFLAGS += -I/usr/include/irods \

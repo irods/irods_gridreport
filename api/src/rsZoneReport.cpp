@@ -12,6 +12,7 @@
 #include "irods_server_api_call.hpp"
 
 #include <jansson.h>
+#include <map>
 
 #ifdef RODS_SERVER
 
@@ -75,6 +76,11 @@ irods::error get_server_reports(
                    SYS_MALLOC_ERR,
                    "json_object() failed" );
     }
+
+    std::map< rodsServerHost_t*, int > svr_reported;
+    rodsServerHost_t* icat_host = 0;
+    char* zone_name = getLocalZoneName(); 
+    int status = getRcatHost( MASTER_RCAT, zone_name, &icat_host );
  
     resc_results_t rescs;
     irods::error ret = gather_resources(
@@ -101,20 +107,38 @@ irods::error get_server_reports(
         if( !ret.ok() ) {
             return PASS( ret );
         }
-       
-        rodsServerHost_t* tmp_host;
+
+        rodsServerHost_t* tmp_host = 0;
         ret = resc_ptr->get_property< rodsServerHost_t* >(
                   irods::RESOURCE_HOST,
                   tmp_host ); 
         if( !ret.ok() ) {
             return PASS( ret );
         }
+
+        // skip the icat server as that is done separately
+        if( tmp_host == icat_host ) {
+            continue;
+
+        }
+
+        // skip previously reported servers
+        std::map< rodsServerHost_t*, int >::iterator svr_itr = 
+            svr_reported.find( tmp_host );
+        if( svr_itr != svr_reported.end() ) {
+        rodsLog( LOG_NOTICE, "XXXX - skipping [%s]", resc_name.c_str() );
+            continue;
+
+        }
+
+        rodsLog( LOG_NOTICE, "XXXX - processing [%s]", resc_name.c_str() );
+        svr_reported[ tmp_host ] = 1;
          
         int status = svrToSvrConnect( _comm, tmp_host );
         if( status < 0 ) {
-            return ERROR(
-                       status,
-                       "failed in svrToSvrConnect" );
+            irods::log( ERROR( status,
+                       "failed in svrToSvrConnect" ) );
+            continue;
         }
 
         bytesBuf_t* bbuf = 0;
@@ -130,20 +154,26 @@ irods::error get_server_reports(
                 "rcServerReport failed for [%s], status = %d",
                 "",
                 status );
+            continue;
         }
+
+        // possible null termination issues
+        std::string tmp_str;
+        tmp_str.assign( (char*)bbuf->buf, bbuf->len );
 
         json_error_t j_err;
         json_t* j_resc = json_loads(
-                             (char*)bbuf->buf,
-                             bbuf->len,
+                             tmp_str.data(),
+                             tmp_str.size(),
                              &j_err );
         if( !j_resc ) {
             std::string msg( "json_loads failed [" );
             msg += j_err.text;
             msg += "]";
-            return ERROR(
+            irods::log( ERROR(
                 ACTION_FAILED_ERR,
-                msg );
+                msg ) );
+            continue;
         }
 
         json_array_append( _resc_arr, j_resc );
