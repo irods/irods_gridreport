@@ -81,6 +81,11 @@ irods::error get_server_reports(
     rodsServerHost_t* icat_host = 0;
     char* zone_name = getLocalZoneName(); 
     int status = getRcatHost( MASTER_RCAT, zone_name, &icat_host );
+    if( status < 0 ) {
+        return ERROR( 
+                   status,
+                   "getRcatHost failed" ); 
+    }
  
     resc_results_t rescs;
     irods::error ret = gather_resources(
@@ -117,7 +122,8 @@ irods::error get_server_reports(
         }
 
         // skip the icat server as that is done separately
-        if( tmp_host == icat_host ) {
+        // also skip null tmp_hosts resources ( coordinating )
+        if( !tmp_host || tmp_host == icat_host ) {
             continue;
 
         }
@@ -126,12 +132,10 @@ irods::error get_server_reports(
         std::map< rodsServerHost_t*, int >::iterator svr_itr = 
             svr_reported.find( tmp_host );
         if( svr_itr != svr_reported.end() ) {
-        rodsLog( LOG_NOTICE, "XXXX - skipping [%s]", resc_name.c_str() );
             continue;
 
         }
 
-        rodsLog( LOG_NOTICE, "XXXX - processing [%s]", resc_name.c_str() );
         svr_reported[ tmp_host ] = 1;
          
         int status = svrToSvrConnect( _comm, tmp_host );
