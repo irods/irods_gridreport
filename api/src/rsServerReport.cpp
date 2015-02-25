@@ -768,24 +768,40 @@ extern "C" {
             return PASS( ret );
         }
 
+        char host_name_char[ MAX_NAME_LEN ];
+        if ( gethostname( host_name_char, MAX_NAME_LEN ) < 0 ) {
+            return ERROR( SYS_GET_HOSTNAME_ERR, "failed in gethostname" );
+
+        }
+
+        const std::string local_host_name( host_name_char );
+
         for( size_t i = 0; 
              i < rescs.size();
              ++i ) {
 
             irods::lookup_table< std::string >& resc = rescs[ i ];
-           
+
+            std::string host_name;
+            ret = resc.get( irods::RESOURCE_LOCATION, host_name );
+            if( !ret.ok() ) {
+                irods::log( PASS( ret ) );
+                continue;
+            }
+
             std::string name;
             ret = resc.get( irods::RESOURCE_NAME, name );
             if( !ret.ok() ) {
                 irods::log( PASS( ret ) );
                 continue;
             }
-     
-            std::string host_name;
-            ret = resc.get( irods::RESOURCE_LOCATION, host_name );
-            if( !ret.ok() ) {
-                irods::log( PASS( ret ) );
+
+            if( host_name != irods::EMPTY_RESC_HOST &&
+                std::string::npos == host_name.find( local_host_name ) &&
+                std::string::npos == local_host_name.find( host_name ) ) {
+                rodsLog( LOG_NOTICE, "XXXX - skipping non-local resource [%s] on [%s]", name.c_str(), host_name.c_str() );
                 continue;
+
             }
 
             std::string type;
